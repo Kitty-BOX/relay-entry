@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DSH 中转 · 外网入口</title>
+<meta http-equiv="refresh" content="30">
+<style>
+  :root{color-scheme:dark light;}
+  *{box-sizing:border-box;}
+  body{font:15px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    margin:0;background:#0f1115;color:#e6e6e6;min-height:100vh;}
+  .wrap{max-width:640px;margin:0 auto;padding:28px 18px 60px;}
+  h1{font-size:20px;margin:0 0 4px;}
+  .sub{color:#8b95a7;font-size:13px;margin-bottom:22px;}
+  .card{background:#171a21;border:1px solid #262b36;border-radius:12px;padding:16px;margin-bottom:14px;}
+  .lbl{font-size:12px;color:#8b95a7;margin-bottom:8px;}
+  .url{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;
+    word-break:break-all;background:#0b0d11;border:1px solid #262b36;border-radius:8px;
+    padding:10px 12px;color:#7fd1ff;user-select:all;}
+  .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  button{cursor:pointer;border:1px solid #33405a;background:#1c2436;color:#cdd6e4;
+    border-radius:8px;padding:7px 13px;font-size:13px;}
+  button:active{transform:translateY(1px);}
+  .ok{color:#5fd39a;font-size:13px;margin-top:8px;min-height:18px;}
+  .meta{color:#8b95a7;font-size:12px;margin-top:4px;}
+  .tip{background:#141824;border:1px dashed #2a3346;border-radius:10px;padding:12px 14px;
+    font-size:13px;color:#9aa4b5;}
+  .tip code{color:#7fd1ff;background:#0b0d11;padding:1px 5px;border-radius:4px;}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid #33405a;
+    border-top-color:#7fd1ff;border-radius:50%;animation:sp 1s linear infinite;vertical-align:-2px;margin-right:6px;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🌐 DSH 中转 · 外网入口</h1>
+  <div class="sub">隧道域名会定期轮换，本页每 30 秒自动刷新，永远给你<b>当前</b>可用的外网地址。</div>
+
+  <div class="card">
+    <div class="lbl">Base URL（填进 Cline / Cherry / OpenAI 兼容工具）</div>
+    <div class="url" id="v1">…</div>
+    <div class="row"><button onclick="copy('v1')">复制 Base URL</button>
+      <button onclick="copy('console')">复制 控制台地址</button>
+      <button onclick="load(true)">立即刷新</button></div>
+  </div>
+
+  <div class="card">
+    <div class="lbl">控制台（管理员 / 查账）</div>
+    <div class="url" id="console">…</div>
+    <div class="meta" id="meta">加载中…</div>
+  </div>
+
+  <div class="tip">
+    用法：把 <b>Base URL</b> 填进工具里，再用<b>你自己的 key</b> 填 API Key 即可。
+    控制台地址后面拼 <code>?key=你的key</code> 进入。本页不含任何 key。
+  </div>
+  <div class="ok" id="ok"></div>
+</div>
+<script>
+var $id=id=>document.getElementById(id);
+function copy(id){
+  var el=$(id).textContent.trim();
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(el).then(()=>{$('ok').textContent='✅ 已复制 '+el;});
+  }else{
+    var t=document.createElement('textarea');t.value=el;document.body.appendChild(t);t.select();
+    document.execCommand('copy');t.remove();$('ok').textContent='✅ 已复制 '+el;
+  }
+}
+function setFrom(d){
+  $('v1').textContent = d.v1 || (d.tunnel? d.tunnel.replace(/\/$/,'')+'/v1':'');
+  $('console').textContent = d.console || (d.tunnel? d.tunnel.replace(/\/$/,'')+'/console':'');
+  $('meta').textContent = '最近更新：'+(d.updated||'—');
+}
+function load(manual){
+  var m=$('meta'); if(!manual)m.textContent='加载中…';
+  fetch('./relay.json?t='+Date.now(),{cache:'no-store'})
+    .then(r=>r.ok?r.json():Promise.reject(r))
+    .then(d=>{ setFrom(d); $('ok').textContent='✅ '+new Date().toLocaleTimeString()+' 已同步'; })
+    .catch(()=>{ m.textContent='⚠️ 暂时拿不到最新地址，点“立即刷新”重试。'; });
+}
+load(false);
+setInterval(load, 30000);
+</script>
+</body>
+</html>
