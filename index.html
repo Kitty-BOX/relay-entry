@@ -25,11 +25,9 @@
   .ok{color:#5fd39a;font-size:13px;margin-top:8px;min-height:18px;}
   .meta{color:#8b95a7;font-size:12px;margin-top:4px;}
   .tip{background:#141824;border:1px dashed #2a3346;border-radius:10px;padding:12px 14px;
-    font-size:13px;color:#9aa4b5;}
-  .tip code{color:#7fd1ff;background:#0b0d11;padding:1px 5px;border-radius:4px;}
-  .spin{display:inline-block;width:14px;height:14px;border:2px solid #33405a;
-    border-top-color:#7fd1ff;border-radius:50%;animation:sp 1s linear infinite;vertical-align:-2px;margin-right:6px;}
-  @keyframes sp{to{transform:rotate(360deg);}}
+    font-size:13px;color:#9aa4b5;margin-top:14px;}
+  .tip code{color:#7fd1ff;background:#0b0d11;padding:1px 5px;border-radius:4px;word-break:break-all;}
+  .dim{color:#5b6472;font-size:12px;margin-top:10px;word-break:break-all;}
 </style>
 </head>
 <body>
@@ -46,42 +44,52 @@
   </div>
 
   <div class="card">
-    <div class="lbl">控制台（管理员 / 查账）</div>
+    <div class="lbl">控制台（查账 / 管理，需填自己的 key）</div>
     <div class="url" id="console">…</div>
     <div class="meta" id="meta">加载中…</div>
   </div>
 
   <div class="tip">
-    用法：把 <b>Base URL</b> 填进工具里，再用<b>你自己的 key</b> 填 API Key 即可。
+    用法：把 <b>Base URL</b> 填进工具，再用<b>你自己的 key</b> 填 API Key；
     控制台地址后面拼 <code>?key=你的key</code> 进入。本页不含任何 key。
+    若上面一直显示「…」，用这条固定 JSON 拿最新地址：<br>
+    <code>https://raw.githubusercontent.com/Kitty-BOX/relay-entry/main/relay.json</code>
   </div>
   <div class="ok" id="ok"></div>
+  <div class="dim" id="src"></div>
 </div>
 <script>
-var $id=id=>document.getElementById(id);
+// 烘焙的默认值：即使下面实时抓取失败，页面也永远有地址（最多滞后约 2 分钟）
+//__RELAY_DEFAULT__ var RELAY_DEFAULT = null;
+function setFrom(d, tag){
+  var tunnel = (d && d.tunnel) || '';
+  var v1 = (d && d.v1) || (tunnel ? tunnel.replace(/\/$/,'') + '/v1' : '');
+  var cs = (d && d.console) || (tunnel ? tunnel.replace(/\/$/,'') + '/console' : '');
+  $('v1').textContent = v1 || '（未获取到地址）';
+  $('console').textContent = cs || '（未获取到地址）';
+  $('meta').textContent = '最近更新：' + ((d && d.updated) || '未知') + (tag ? ('  ' + tag) : '');
+  $('src').textContent = tag ? ('当前显示：' + tag) : '';
+}
+function $(id){return document.getElementById(id);}
 function copy(id){
-  var el=$(id).textContent.trim();
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(el).then(()=>{$('ok').textContent='✅ 已复制 '+el;});
-  }else{
-    var t=document.createElement('textarea');t.value=el;document.body.appendChild(t);t.select();
-    document.execCommand('copy');t.remove();$('ok').textContent='✅ 已复制 '+el;
+  var el = $(id).textContent.trim();
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(el).then(function(){ $('ok').textContent='✅ 已复制'; });
+  } else {
+    var t=document.createElement('textarea'); t.value=el; document.body.appendChild(t);
+    t.select(); document.execCommand('copy'); t.remove(); $('ok').textContent='✅ 已复制';
   }
 }
-function setFrom(d){
-  $('v1').textContent = d.v1 || (d.tunnel? d.tunnel.replace(/\/$/,'')+'/v1':'');
-  $('console').textContent = d.console || (d.tunnel? d.tunnel.replace(/\/$/,'')+'/console':'');
-  $('meta').textContent = '最近更新：'+(d.updated||'—');
-}
 function load(manual){
-  var m=$('meta'); if(!manual)m.textContent='加载中…';
-  fetch('./relay.json?t='+Date.now(),{cache:'no-store'})
-    .then(r=>r.ok?r.json():Promise.reject(r))
-    .then(d=>{ setFrom(d); $('ok').textContent='✅ '+new Date().toLocaleTimeString()+' 已同步'; })
-    .catch(()=>{ m.textContent='⚠️ 暂时拿不到最新地址，点“立即刷新”重试。'; });
+  if(!manual) $('meta').textContent = '加载中…';
+  if(RELAY_DEFAULT && !manual){ setFrom(RELAY_DEFAULT, '（页面内置，可能不是最新）'); }
+  fetch('./relay.json?t='+Date.now(), {cache:'no-store'})
+    .then(function(r){ return r.ok ? r.json() : Promise.reject(r); })
+    .then(function(d){ setFrom(d, ''); $('ok').textContent='✅ '+new Date().toLocaleTimeString()+' 已同步（实时）'; })
+    .catch(function(){ if(manual){ $('meta').textContent='⚠️ 实时获取失败，显示的是页面内置地址（可能不是最新）。'; } });
 }
 load(false);
-setInterval(load, 30000);
+setInterval(function(){ load(true); }, 30000);
 </script>
 </body>
 </html>
