@@ -8,89 +8,87 @@
 <style>
   :root{color-scheme:dark light;}
   *{box-sizing:border-box;}
-  body{font:15px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-    margin:0;background:#0f1115;color:#e6e6e6;min-height:100vh;}
-  .wrap{max-width:640px;margin:0 auto;padding:28px 18px 60px;}
+  body{font:15px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;margin:0;background:#0f1115;color:#e6e6e6;min-height:100vh;}
+  .wrap{max-width:680px;margin:0 auto;padding:28px 18px 60px;}
   h1{font-size:20px;margin:0 0 4px;}
-  .sub{color:#8b95a7;font-size:13px;margin-bottom:22px;}
-  .card{background:#171a21;border:1px solid #262b36;border-radius:12px;padding:16px;margin-bottom:14px;}
-  .lbl{font-size:12px;color:#8b95a7;margin-bottom:8px;}
-  .url{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;
-    word-break:break-all;background:#0b0d11;border:1px solid #262b36;border-radius:8px;
-    padding:10px 12px;color:#7fd1ff;user-select:all;}
+  .sub{color:#8b95a7;font-size:13px;margin-bottom:20px;}
+  .card{background:#171a21;border:1px solid #262b36;border-radius:12px;padding:14px 16px;margin-bottom:12px;}
+  .card.rec{border-color:#2b6f8f;background:#141c24;}
+  .card.rec .lbl::before{content:"★ ";color:#5fd39a;}
+  .lbl{font-size:13px;font-weight:600;color:#cdd6e4;margin-bottom:10px;}
+  .lbl2{font-size:11px;color:#8b95a7;margin-bottom:4px;}
+  .row2{display:flex;gap:12px;flex-wrap:wrap;}
+  .row2>div{flex:1 1 230px;}
+  .url{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:14px;word-break:break-all;background:#0b0d11;border:1px solid #262b36;border-radius:8px;padding:8px 10px;color:#7fd1ff;user-select:all;}
   .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
-  button{cursor:pointer;border:1px solid #33405a;background:#1c2436;color:#cdd6e4;
-    border-radius:8px;padding:7px 13px;font-size:13px;}
+  button{cursor:pointer;border:1px solid #33405a;background:#1c2436;color:#cdd6e4;border-radius:8px;padding:6px 12px;font-size:13px;}
   button:active{transform:translateY(1px);}
-  .ok{color:#5fd39a;font-size:13px;margin-top:8px;min-height:18px;}
+  .ok{color:#5fd39a;font-size:13px;margin-top:10px;min-height:18px;}
   .meta{color:#8b95a7;font-size:12px;margin-top:4px;}
-  .tip{background:#141824;border:1px dashed #2a3346;border-radius:10px;padding:12px 14px;
-    font-size:13px;color:#9aa4b5;margin-top:14px;}
+  .tip{background:#141824;border:1px dashed #2a3346;border-radius:10px;padding:12px 14px;font-size:13px;color:#9aa4b5;margin-top:14px;}
   .tip code{color:#7fd1ff;background:#0b0d11;padding:1px 5px;border-radius:4px;word-break:break-all;}
-  .dim{color:#5b6472;font-size:12px;margin-top:10px;word-break:break-all;}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>🌐 DSH 中转 · 外网入口</h1>
-  <div class="sub">隧道域名会定期轮换，本页每 30 秒自动刷新，永远给你<b>当前</b>可用的外网地址。</div>
+  <div class="sub">外网隧道会间歇掉线/换域名，本页每 30 秒自动刷新，列出当前<b>所有可用</b>入口。<br>
+  免费版隧道在浏览器里会有一行「公共服务」提示，<b>不影响 API 工具调用</b>；校园网内请直接用「③ 校园直连」，无提示无轮换。</div>
 
-  <div class="card">
-    <div class="lbl">Base URL（填进 Cline / Cherry / OpenAI 兼容工具）</div>
-    <div class="url" id="v1">…</div>
-    <div class="row"><button onclick="copy('v1')">复制 Base URL</button>
-      <button onclick="copy('console')">复制 控制台地址</button>
-      <button onclick="load(true)">立即刷新</button></div>
+  <div class="card rec">
+    <div class="lbl">① serveo 固定入口（外网最稳，推荐）</div>
+    <div class="row2">
+      <div><div class="lbl2">API Base URL（含 /v1）</div><div class="url" id="v1p">https://recipiunt.serveousercontent.com/v1</div></div>
+      <div><div class="lbl2">控制台（拼 ?key=你的key）</div><div class="url" id="csp">https://recipiunt.serveousercontent.com/console</div></div>
+    </div>
+    <div class="row"><button onclick="cp('v1p')">复制 API</button><button onclick="cp('csp')">复制控制台</button></div>
   </div>
 
   <div class="card">
-    <div class="lbl">控制台（查账 / 管理，需填自己的 key）</div>
-    <div class="url" id="console">…</div>
-    <div class="meta" id="meta">加载中…</div>
+    <div class="lbl">② localhost.run 备用（域名会轮换）</div>
+    <div class="row2">
+      <div><div class="lbl2">API Base URL</div><div class="url" id="v1b">https://abdf147a274308.app.lhr.life/v1</div></div>
+      <div><div class="lbl2">控制台</div><div class="url" id="csb">https://abdf147a274308.app.lhr.life/console</div></div>
+    </div>
+    <div class="row"><button onclick="cp('v1b')">复制 API</button><button onclick="cp('csb')">复制控制台</button></div>
+  </div>
+
+  <div class="card">
+    <div class="lbl">③ 校园网直连（仅校内可达，无警告页）</div>
+    <div class="row2">
+      <div><div class="lbl2">API Base URL</div><div class="url" id="v1c">http://121.195.160.249:18971/v1</div></div>
+      <div><div class="lbl2">控制台</div><div class="url" id="csc">http://121.195.160.249:18971/console</div></div>
+    </div>
+    <div class="row"><button onclick="cp('v1c')">复制 API</button><button onclick="cp('csc')">复制控制台</button></div>
   </div>
 
   <div class="tip">
-    用法：把 <b>Base URL</b> 填进工具，再用<b>你自己的 key</b> 填 API Key；
-    控制台地址后面拼 <code>?key=你的key</code> 进入。本页不含任何 key。
-    若上面一直显示「…」，用这条固定 JSON 拿最新地址：<br>
-    <code>https://raw.githubusercontent.com/Kitty-BOX/relay-entry/main/relay.json</code>
+    用法：把 <b>API Base URL</b> 填进 Cline / Cherry / OpenAI 兼容工具，再用<b>你自己的 key</b> 填 API Key；
+    控制台地址后面拼 <code>?key=你的key</code>。本页不含任何 key。<br>
+    若实时刷新一直失败（raw.githubusercontent 被限），上面是<b>内置</b>最新值（最多滞后 2 分钟）。
+    三个入口都打不开时：多为隧道在自愈（watchdog 每 15 秒重连），稍等或换另一个入口。
   </div>
   <div class="ok" id="ok"></div>
-  <div class="dim" id="src"></div>
+  <div class="meta" id="meta">最近更新：2026-11-20 14:17:21 +0800</div>
 </div>
 <script>
-// 烘焙的默认值：即使下面实时抓取失败，页面也永远有地址（最多滞后约 2 分钟）
-//__RELAY_DEFAULT__ var RELAY_DEFAULT = {"tunnel":"https://recipiunt.serveousercontent.com","v1":"https://recipiunt.serveousercontent.com/v1","console":"https://recipiunt.serveousercontent.com/console","updated":"2026-11-20 14:14:01 +0800","relayInternal":"121.195.160.249:18971"};
-function setFrom(d, tag){
-  var tunnel = (d && d.tunnel) || '';
-  var v1 = (d && d.v1) || (tunnel ? tunnel.replace(/\/$/,'') + '/v1' : '');
-  var cs = (d && d.console) || (tunnel ? tunnel.replace(/\/$/,'') + '/console' : '');
-  $('v1').textContent = v1 || '（未获取到地址）';
-  $('console').textContent = cs || '（未获取到地址）';
-  $('meta').textContent = '最近更新：' + ((d && d.updated) || '未知') + (tag ? ('  ' + tag) : '');
-  $('src').textContent = tag ? ('当前显示：' + tag) : '';
+function el(id){return document.getElementById(id);}
+function cp(id){ var t=el(id).textContent.trim();
+  if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){el('ok').textContent='✅ 已复制 '+t;});}
+  else{var x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');x.remove();el('ok').textContent='✅ 已复制 '+t;}
 }
-function $(id){return document.getElementById(id);}
-function copy(id){
-  var el = $(id).textContent.trim();
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(el).then(function(){ $('ok').textContent='✅ 已复制'; });
-  } else {
-    var t=document.createElement('textarea'); t.value=el; document.body.appendChild(t);
-    t.select(); document.execCommand('copy'); t.remove(); $('ok').textContent='✅ 已复制';
-  }
-}
-function load(manual){
-  if(!manual) $('meta').textContent = '加载中…';
-  if(RELAY_DEFAULT && !manual){ setFrom(RELAY_DEFAULT, '（页面内置，可能不是最新）'); }
-  // 实时数据走 raw（这条你确认打得开），不吃 github.io 的旧缓存
-  fetch('https://raw.githubusercontent.com/Kitty-BOX/relay-entry/main/relay.json?t='+Date.now(), {cache:'no-store', mode:'cors'})
-    .then(function(r){ return r.ok ? r.json() : Promise.reject(r); })
-    .then(function(d){ setFrom(d, ''); $('ok').textContent='✅ '+new Date().toLocaleTimeString()+' 已同步（实时）'; })
-    .catch(function(){ if(manual){ $('meta').textContent='⚠️ 实时获取失败，显示的是页面内置地址（可能不是最新）。'; } });
-}
-load(false);
-setInterval(function(){ load(true); }, 30000);
+(function(){
+  fetch('https://raw.githubusercontent.com/Kitty-BOX/relay-entry/main/relay.json?t='+Date.now(),{cache:'no-store',mode:'cors'})
+    .then(function(r){return r.ok?r.json():Promise.reject(r);})
+    .then(function(d){
+      var ep=(d&&d.endpoints)||[];
+      if(ep[0]&&ep[0].v1){el('v1p').textContent=ep[0].v1;el('csp').textContent=ep[0].console;}
+      if(ep[1]&&ep[1].v1){el('v1b').textContent=ep[1].v1;el('csb').textContent=ep[1].console;}
+      if(ep[2]&&ep[2].v1){el('v1c').textContent=ep[2].v1;el('csc').textContent=ep[2].console;}
+      el('meta').textContent='最近更新：'+((d&&d.updated)||'')+'  ✓ 实时已同步';
+    })
+    .catch(function(){ el('meta').textContent='⚠️ 实时获取失败，显示内置值（最多滞后 2 分钟）。'; });
+})();
 </script>
 </body>
 </html>
