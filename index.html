@@ -11,6 +11,7 @@
   body{font:15px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;margin:0;background:#0f1115;color:#e6e6e6;min-height:100vh;}
   .wrap{max-width:680px;margin:0 auto;padding:28px 18px 60px;}
   h1{font-size:20px;margin:0 0 4px;}
+  h2{font-size:16px;margin:26px 0 8px;color:#cdd6e4;}
   .sub{color:#8b95a7;font-size:13px;margin-bottom:20px;}
   .card{background:#171a21;border:1px solid #262b36;border-radius:12px;padding:14px 16px;margin-bottom:12px;}
   .card.rec{border-color:#2b6f8f;background:#141c24;}
@@ -27,6 +28,7 @@
   .meta{color:#8b95a7;font-size:12px;margin-top:4px;}
   .tip{background:#141824;border:1px dashed #2a3346;border-radius:10px;padding:12px 14px;font-size:13px;color:#9aa4b5;margin-top:14px;}
   .tip code{color:#7fd1ff;background:#0b0d11;padding:1px 5px;border-radius:4px;word-break:break-all;}
+  .note{color:#e0a960;font-size:12px;margin-top:6px;}
 </style>
 </head>
 <body>
@@ -62,14 +64,40 @@
     <div class="row"><button onclick="cp('v1c')">复制 API</button><button onclick="cp('csc')">复制控制台</button></div>
   </div>
 
+  <h2>🔌 jz-bridge 网关（8787，OpenAI 兼容 /v1）</h2>
+  <div class="card rec">
+    <div class="lbl">④ jz-gw serveo 固定入口（推荐）</div>
+    <div class="row2">
+      <div><div class="lbl2">API Base URL（含 /v1）</div><div class="url" id="gw1">https://jizhigw.serveousercontent.com/v1</div></div>
+    </div>
+    <div class="row"><button onclick="cp('gw1')">复制 API</button></div>
+    <div class="note">⚠️ serveo 免费通道：非流式请求超过约 5 秒会 502，请对长回答开 <b>stream（流式）</b>；短请求/查模型不受影响。</div>
+  </div>
+
+  <div class="card">
+    <div class="lbl">⑤ jz-gw localhost.run 备用（域名会轮换，流式/非流式均可）</div>
+    <div class="row2">
+      <div><div class="lbl2">API Base URL</div><div class="url" id="gwb">https://acd69589efbd9d.app.lhr.life/v1</div></div>
+    </div>
+    <div class="row"><button onclick="cp('gwb')">复制 API</button></div>
+  </div>
+
+  <div class="card">
+    <div class="lbl">⑥ jz-gw 校园网直连（仅校内可达）</div>
+    <div class="row2">
+      <div><div class="lbl2">API Base URL</div><div class="url" id="gwc">http://121.195.160.249:8787/v1</div></div>
+    </div>
+    <div class="row"><button onclick="cp('gwc')">复制 API</button></div>
+  </div>
+
   <div class="tip">
     用法：把 <b>API Base URL</b> 填进 Cline / Cherry / OpenAI 兼容工具，再用<b>你自己的 key</b> 填 API Key；
     控制台地址后面拼 <code>?key=你的key</code>。本页不含任何 key。<br>
     若实时刷新一直失败（raw.githubusercontent 被限），上面是<b>内置</b>最新值（最多滞后 2 分钟）。
-    三个入口都打不开时：多为隧道在自愈（watchdog 每 15 秒重连），稍等或换另一个入口。
+    入口都打不开时：多为隧道在自愈（watchdog 每 15 秒重连），稍等或换另一个入口。
   </div>
   <div class="ok" id="ok"></div>
-  <div class="meta" id="meta">最近更新：2026-11-23 11:52:01 +0800</div>
+  <div class="meta" id="meta">最近更新：2026-11-23 11:54:01 +0800</div>
 </div>
 <script>
 function el(id){return document.getElementById(id);}
@@ -85,6 +113,10 @@ function cp(id){ var t=el(id).textContent.trim();
       if(ep[0]&&ep[0].v1){el('v1p').textContent=ep[0].v1;el('csp').textContent=ep[0].console;}
       if(ep[1]&&ep[1].v1){el('v1b').textContent=ep[1].v1;el('csb').textContent=ep[1].console;}
       if(ep[2]&&ep[2].v1){el('v1c').textContent=ep[2].v1;el('csc').textContent=ep[2].console;}
+      var g=(d&&d.gateway&&d.gateway.endpoints)||[];
+      if(g[0]&&g[0].v1){el('gw1').textContent=g[0].v1;}
+      if(g[1]&&g[1].v1){el('gwb').textContent=g[1].v1;}
+      if(g[2]&&g[2].v1){el('gwc').textContent=g[2].v1;}
       el('meta').textContent='最近更新：'+((d&&d.updated)||'')+'  ✓ 实时已同步';
     })
     .catch(function(){ el('meta').textContent='⚠️ 实时获取失败，显示内置值（最多滞后 2 分钟）。'; });
