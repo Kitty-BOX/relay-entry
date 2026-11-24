@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-24 11:04:01 +0800",
+  "updated": "2026-11-24 11:06:01 +0800",
   "relayInternal": "121.195.160.249:18971",
   "endpoints": [
     { "label": "serveo 固定入口（外网最稳，推荐）", "url": "https://601aadff6b7e7a.app.lhr.life", "v1": "https://601aadff6b7e7a.app.lhr.life/v1", "console": "https://601aadff6b7e7a.app.lhr.life/console" },
