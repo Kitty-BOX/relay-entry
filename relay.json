@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-28 18:04:01 +0800",
+  "updated": "2026-11-28 18:06:01 +0800",
   "relayInternal": "121.195.160.249:18971",
   "endpoints": [
     { "label": "serveo 固定入口（外网最稳，推荐）", "url": "https://recipiunt.serveousercontent.com", "v1": "https://recipiunt.serveousercontent.com/v1", "console": "https://recipiunt.serveousercontent.com/console" },
@@ -10,7 +10,7 @@
     "service": "jz-bridge 网关 /v1（OpenAI 兼容）",
     "endpoints": [
       { "label": "jz-gw serveo 固定入口（推荐；长非流式请求建议开 stream）", "url": "https://jizhigw.serveousercontent.com", "v1": "https://jizhigw.serveousercontent.com/v1" },
-      { "label": "jz-gw localhost.run 备用（域名会轮换）", "url": "https://5dda50525172f4.app.lhr.life", "v1": "https://5dda50525172f4.app.lhr.life/v1" },
+      { "label": "jz-gw localhost.run 备用（域名会轮换）", "url": "https://5c0984d1c8fd96.app.lhr.life", "v1": "https://5c0984d1c8fd96.app.lhr.life/v1" },
       { "label": "jz-gw 校园网直连（仅校内可达）", "url": "http://121.195.160.249:8787", "v1": "http://121.195.160.249:8787/v1" }
     ]
   }
