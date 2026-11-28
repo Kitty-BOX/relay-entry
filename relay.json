@@ -1,9 +1,9 @@
 {
-  "updated": "2026-11-28 20:00:01 +0800",
+  "updated": "2026-11-28 20:02:01 +0800",
   "relayInternal": "121.195.160.249:18971",
   "endpoints": [
     { "label": "serveo 固定入口（外网最稳，推荐）", "url": "https://recipiunt.serveousercontent.com", "v1": "https://recipiunt.serveousercontent.com/v1", "console": "https://recipiunt.serveousercontent.com/console" },
-    { "label": "localhost.run 备用（域名会轮换）", "url": "https://c245c8afd273cd.app.lhr.life", "v1": "https://c245c8afd273cd.app.lhr.life", "console": "https://c245c8afd273cd.app.lhr.life" },
+    { "label": "localhost.run 备用（域名会轮换）", "url": "https://805063b58ef538.app.lhr.life", "v1": "https://805063b58ef538.app.lhr.life", "console": "https://805063b58ef538.app.lhr.life" },
     { "label": "校园网直连（仅校内可达，无警告页）", "url": "http://121.195.160.249:18971", "v1": "http://121.195.160.249:18971/v1", "console": "http://121.195.160.249:18971/console" }
   ],
   "gateway": {
